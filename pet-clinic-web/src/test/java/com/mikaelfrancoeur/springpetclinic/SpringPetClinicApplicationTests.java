@@ -1,10 +1,10 @@
-package springpetclinic;
+package com.mikaelfrancoeur.springpetclinic;
 
 import com.mikaelfrancoeur.springpetclinic.web.SpringPetClinicApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes={SpringPetClinicApplication.class})
+@SpringBootTest(classes = {SpringPetClinicApplication.class})
 class SpringPetClinicApplicationTests {
 
     @Test
