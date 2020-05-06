@@ -1,12 +1,11 @@
 package com.mikaelfrancoeur.springpetclinic.services.map;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractMapService<T, ID> {
-    private Map<ID, T> map = new HashMap<>();
+    private ConcurrentHashMap<ID, T> map = new ConcurrentHashMap<>();
 
     T findById(ID id) {
         return map.get(id);
