@@ -6,6 +6,15 @@
 </head>
 <body>
 <h1 th:text="'vets index'"></h1>
-
+<table>
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+    </tr>
+    <tr th:each="vet : ${vets}">
+        <td th:text="${vet.getFirstName()}"></td>
+        <td th:text="${vet.getLastName()}"></td>
+    </tr>
+</table>
 </body>
 </html>
