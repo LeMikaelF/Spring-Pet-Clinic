@@ -4,9 +4,10 @@ import com.mikaelfrancoeur.springpetclinic.model.Owner;
 import com.mikaelfrancoeur.springpetclinic.services.OwnerService;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
-
+    private AtomicLong idCounter = new AtomicLong();
 
     @Override
     public Owner findById(Long id) {
@@ -20,6 +21,7 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
 
     @Override
     public Owner save(Owner owner) {
+        owner.setId(idCounter.getAndIncrement());
         return super.save(owner.getId(), owner);
     }
 

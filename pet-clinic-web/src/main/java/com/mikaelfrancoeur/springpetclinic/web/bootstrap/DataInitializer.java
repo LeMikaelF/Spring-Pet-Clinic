@@ -16,35 +16,32 @@ public class DataInitializer implements CommandLineRunner {
     public DataInitializer(OwnerService ownerService, VetService vetService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
-        Owner owner1 = new Owner();
-        owner1.setId(1L);
-        owner1.setFirstName("Michael");
-        owner1.setLastName("Weston");
-
-        Owner owner2 = new Owner();
-        owner1.setId(2L);
-        owner2.setFirstName("Fiona");
-        owner2.setLastName("Glenanne");
-
-        Vet vet1 = new Vet();
-        vet1.setId(1L);
-        vet1.setFirstName("Sam");
-        vet1.setLastName("Axe");
-
-        Vet vet2 = new Vet();
-        vet2.setId(2L);
-        vet2.setFirstName("Jessie");
-        vet2.setLastName("Porter");
-
-        this.ownerService.save(owner1);
-        this.ownerService.save(owner2);
-        this.vetService.save(vet1);
-        this.vetService.save(vet2);
-        System.out.println("Saved owners and vets in DataInitializer");
     }
 
     @Override
     public void run(String... args) throws Exception {
+        Owner owner1 = new Owner();
+        owner1.setFirstName("Michael");
+        owner1.setLastName("Weston");
 
+        Owner owner2 = new Owner();
+        owner2.setFirstName("Fiona");
+        owner2.setLastName("Glenanne");
+
+        Vet vet1 = new Vet();
+        vet1.setFirstName("Sam");
+        vet1.setLastName("Axe");
+
+        Vet vet2 = new Vet();
+        vet2.setFirstName("Jessie");
+        vet2.setLastName("Porter");
+
+        ownerService.save(owner1);
+        ownerService.save(owner2);
+        vetService.save(vet1);
+        vetService.save(vet2);
+        System.out.println("Saved owners and vets in DataInitializer");
+
+        System.out.println(ownerService.findById(1L));
     }
 }

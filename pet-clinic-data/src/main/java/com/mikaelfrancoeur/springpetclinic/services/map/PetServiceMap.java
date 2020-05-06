@@ -4,8 +4,11 @@ import com.mikaelfrancoeur.springpetclinic.model.Pet;
 import com.mikaelfrancoeur.springpetclinic.services.PetService;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class PetServiceMap extends AbstractMapService<Pet, Long> implements PetService {
+
+    private AtomicLong idCounter = new AtomicLong();
 
     @Override
     public Pet findById(Long id) {
@@ -24,6 +27,7 @@ public class PetServiceMap extends AbstractMapService<Pet, Long> implements PetS
 
     @Override
     public Pet save(Pet pet) {
+        pet.setId(idCounter.getAndIncrement());
         return super.save(pet.getId(), pet);
     }
 
