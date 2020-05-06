@@ -4,8 +4,6 @@ import com.mikaelfrancoeur.springpetclinic.model.Owner;
 import com.mikaelfrancoeur.springpetclinic.model.Vet;
 import com.mikaelfrancoeur.springpetclinic.services.OwnerService;
 import com.mikaelfrancoeur.springpetclinic.services.VetService;
-import com.mikaelfrancoeur.springpetclinic.services.map.OwnerServiceMap;
-import com.mikaelfrancoeur.springpetclinic.services.map.VetServiceMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +13,9 @@ public class DataInitializer implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
 
-    public DataInitializer() {
-        ownerService = new OwnerServiceMap();
-        vetService = new VetServiceMap();
-
+    public DataInitializer(OwnerService ownerService, VetService vetService) {
+        this.ownerService = ownerService;
+        this.vetService = vetService;
         Owner owner1 = new Owner();
         owner1.setId(1L);
         owner1.setFirstName("Michael");
@@ -39,10 +36,10 @@ public class DataInitializer implements CommandLineRunner {
         vet2.setFirstName("Jessie");
         vet2.setLastName("Porter");
 
-        ownerService.save(owner1);
-        ownerService.save(owner2);
-        vetService.save(vet1);
-        vetService.save(vet2);
+        this.ownerService.save(owner1);
+        this.ownerService.save(owner2);
+        this.vetService.save(vet1);
+        this.vetService.save(vet2);
         System.out.println("Saved owners and vets in DataInitializer");
     }
 
