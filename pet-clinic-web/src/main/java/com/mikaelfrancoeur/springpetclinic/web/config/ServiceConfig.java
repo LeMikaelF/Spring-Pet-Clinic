@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-public class ServiceConfiguration {
+public class ServiceConfig {
     @Bean
     @Profile({"map", "default"})
     OwnerService ownerService() {
