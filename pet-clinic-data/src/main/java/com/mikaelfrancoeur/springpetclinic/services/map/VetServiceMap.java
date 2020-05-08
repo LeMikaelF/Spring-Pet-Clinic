@@ -1,6 +1,7 @@
 package com.mikaelfrancoeur.springpetclinic.services.map;
 
 import com.mikaelfrancoeur.springpetclinic.model.Vet;
+import com.mikaelfrancoeur.springpetclinic.services.SpecialtyService;
 import com.mikaelfrancoeur.springpetclinic.services.VetService;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,12 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
 
-    private AtomicLong idCounter = new AtomicLong();
+    private final AtomicLong idCounter = new AtomicLong();
+    private final SpecialtyService specialtyService;
+
+    public VetServiceMap(SpecialtyService specialtyService) {
+        this.specialtyService = specialtyService;
+    }
 
     @Override
     public Vet findById(Long id) {
@@ -32,6 +38,8 @@ public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetS
         if (vet.getId() == null) {
             vet.setId(idCounter.getAndIncrement());
         }
+        vet.getSpecialties().forEach(specialty -> specialty.setId(specialtyService.save(specialty).getId()));
+
         return super.save(vet.getId(), vet);
     }
 
