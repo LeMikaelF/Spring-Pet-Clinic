@@ -2,10 +2,12 @@ package com.mikaelfrancoeur.springpetclinic.services.map;
 
 import com.mikaelfrancoeur.springpetclinic.model.Vet;
 import com.mikaelfrancoeur.springpetclinic.services.VetService;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Service
 public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
 
     private AtomicLong idCounter = new AtomicLong();
