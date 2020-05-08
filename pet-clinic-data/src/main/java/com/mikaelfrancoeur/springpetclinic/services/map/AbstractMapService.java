@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractMapService<T, ID> {
+public abstract class AbstractMapService<T, ID extends Number> {
     private ConcurrentHashMap<ID, T> map = new ConcurrentHashMap<>();
 
     T findById(ID id) {
@@ -27,4 +27,5 @@ public abstract class AbstractMapService<T, ID> {
     void deleteById(ID id) {
         map.remove(id);
     }
+
 }
