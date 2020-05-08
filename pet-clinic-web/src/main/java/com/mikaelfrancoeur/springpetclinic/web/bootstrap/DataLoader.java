@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class DataLoader implements CommandLineRunner {
 
     private final OwnerService ownerService;
     private final VetService vetService;
     private final PetTypeService petTypeService;
 
-    public DataInitializer(OwnerService ownerService, VetService vetService, PetTypeService petTypeService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
@@ -78,18 +78,22 @@ public class DataInitializer implements CommandLineRunner {
         catVisit.setDate(LocalDate.now());
         catVisit.setDescription("Sneezy Kitty");
 
-
         System.out.println("Loaded Owners....");
 
         Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
         vet1.setLastName("Axe");
+        vet1.getSpecialties().add(radiology);
+        vet1.getSpecialties().add(dentistry);
 
         vetService.save(vet1);
 
         Vet vet2 = new Vet();
         vet2.setFirstName("Jessie");
         vet2.setLastName("Porter");
+        vet2.getSpecialties().add(radiology);
+        vet2.getSpecialties().add(dentistry);
+        vet2.getSpecialties().add(surgery);
 
         vetService.save(vet2);
 
