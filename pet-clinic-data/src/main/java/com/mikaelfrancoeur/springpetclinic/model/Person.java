@@ -1,13 +1,14 @@
 package com.mikaelfrancoeur.springpetclinic.model;
 
-public class Person extends BaseEntity {
-    private String firstName;
-    private String lastName;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
-    public Person(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+@MappedSuperclass
+public class Person extends BaseEntity {
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
     public Person() {
     }
