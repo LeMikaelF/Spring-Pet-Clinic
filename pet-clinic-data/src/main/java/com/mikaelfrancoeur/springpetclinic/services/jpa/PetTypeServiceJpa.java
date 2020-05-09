@@ -1,6 +1,7 @@
 package com.mikaelfrancoeur.springpetclinic.services.jpa;
 
 import com.mikaelfrancoeur.springpetclinic.model.PetType;
+import com.mikaelfrancoeur.springpetclinic.repositories.PetTypeRepository;
 import com.mikaelfrancoeur.springpetclinic.services.PetTypeService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -11,20 +12,22 @@ import java.util.Set;
 @Service
 @Profile({"springdatajpa"})
 public class PetTypeServiceJpa implements PetTypeService {
-    private final PetTypeService petTypeService;
+    private final PetTypeRepository petTypeService;
 
-    public PetTypeServiceJpa(PetTypeService petTypeService) {
+    public PetTypeServiceJpa(PetTypeRepository petTypeService) {
         this.petTypeService = petTypeService;
     }
 
     @Override
     public PetType findById(Long id) {
-        return petTypeService.findById(id);
+        return petTypeService.findById(id).orElse(null);
     }
 
     @Override
     public Set<PetType> findAll() {
-        return new HashSet<>(petTypeService.findAll());
+        Set<PetType> set = new HashSet<>();
+        petTypeService.findAll().forEach(set::add);
+        return set;
     }
 
     @Override
