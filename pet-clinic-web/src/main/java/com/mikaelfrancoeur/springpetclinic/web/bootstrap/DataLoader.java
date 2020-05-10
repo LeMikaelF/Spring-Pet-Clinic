@@ -1,10 +1,7 @@
 package com.mikaelfrancoeur.springpetclinic.web.bootstrap;
 
 import com.mikaelfrancoeur.springpetclinic.model.*;
-import com.mikaelfrancoeur.springpetclinic.services.OwnerService;
-import com.mikaelfrancoeur.springpetclinic.services.PetTypeService;
-import com.mikaelfrancoeur.springpetclinic.services.SpecialtyService;
-import com.mikaelfrancoeur.springpetclinic.services.VetService;
+import com.mikaelfrancoeur.springpetclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +14,18 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialtyService specialtyService;
+    private final VisitService visitService;
 
     public DataLoader(OwnerService ownerService,
                       VetService vetService,
                       PetTypeService petTypeService,
-                      SpecialtyService specialtyService) {
+                      SpecialtyService specialtyService,
+                      VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialtyService = specialtyService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -38,11 +38,11 @@ public class DataLoader implements CommandLineRunner {
     private void loadData() {
         PetType dog = new PetType();
         dog.setName("Dog");
-        final PetType savedDogPetType = petTypeService.save(dog);
+        PetType savedDogPetType = petTypeService.save(dog);
 
         PetType cat = new PetType();
         cat.setName("Cat");
-        final PetType savedCatPetType = petTypeService.save(cat);
+        PetType savedCatPetType = petTypeService.save(cat);
 
         Specialty radiology = new Specialty();
         radiology.setDescription("Radiology");
@@ -92,6 +92,7 @@ public class DataLoader implements CommandLineRunner {
         catVisit.setPet(fionasCat);
         catVisit.setDate(LocalDate.now());
         catVisit.setDescription("Sneezy Kitty");
+        visitService.save(catVisit);
 
         System.out.println("Loaded Owners....");
 

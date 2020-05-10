@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @Profile({"map", "default"})
 public class VisitServiceMap extends AbstractMapService<Visit, Long> implements VisitService {
+    private AtomicLong counter = new AtomicLong();
     @Override
     public Visit findById(Long id) {
         return super.findById(id);
@@ -28,9 +30,11 @@ public class VisitServiceMap extends AbstractMapService<Visit, Long> implements 
 
     @Override
     public Visit save(Visit visit) {
+        if (visit.getId() == null) {
+            visit.setId(counter.getAndIncrement());
+        }
         String errormsg = "Invalid visit";
         Objects.requireNonNull(visit.getPet(), errormsg);
-        Objects.requireNonNull(visit.getId(), errormsg);
         Objects.requireNonNull(visit.getPet().getOwner(), errormsg);
         Objects.requireNonNull(visit.getPet().getOwner().getId(), errormsg);
         return super.save(visit.getId(), visit);
