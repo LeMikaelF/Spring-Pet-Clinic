@@ -2,12 +2,14 @@ package com.mikaelfrancoeur.springpetclinic.services.map;
 
 import com.mikaelfrancoeur.springpetclinic.model.Specialty;
 import com.mikaelfrancoeur.springpetclinic.services.SpecialtyService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+@Profile({"map", "default"})
 public class SpecialtyServiceMap extends AbstractMapService<Specialty, Long> implements SpecialtyService {
     private final AtomicLong counter = new AtomicLong();
 

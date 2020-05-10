@@ -4,16 +4,18 @@ import com.mikaelfrancoeur.springpetclinic.model.Owner;
 import com.mikaelfrancoeur.springpetclinic.services.OwnerService;
 import com.mikaelfrancoeur.springpetclinic.services.PetService;
 import com.mikaelfrancoeur.springpetclinic.services.PetTypeService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+@Profile({"map", "default"})
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
-    private AtomicLong idCounter = new AtomicLong();
     private final PetTypeService petTypeService;
     private final PetService petService;
+    private AtomicLong idCounter = new AtomicLong();
 
     public OwnerServiceMap(PetTypeService petTypeService, PetService petService) {
         this.petTypeService = petTypeService;

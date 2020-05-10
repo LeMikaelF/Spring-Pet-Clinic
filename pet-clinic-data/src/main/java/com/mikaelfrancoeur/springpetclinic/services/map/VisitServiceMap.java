@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Profile({"map", "default"})
 public class VisitServiceMap extends AbstractMapService<Visit, Long> implements VisitService {
     private AtomicLong counter = new AtomicLong();
+
     @Override
     public Visit findById(Long id) {
         return super.findById(id);
