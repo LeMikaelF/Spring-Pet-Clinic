@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerServiceJpaTest {
@@ -82,20 +83,20 @@ class OwnerServiceJpaTest {
     @DisplayName("Delegates saving to the repository.")
     void save() {
         service.save(owner);
-        verify(repository, times(1)).save(eq(owner));
+        verify(repository).save(eq(owner));
     }
 
     @Test
     @DisplayName("Delegates deleting to the repository.")
     void delete() {
         service.delete(owner);
-        verify(repository, times(1)).delete(eq(owner));
+        verify(repository).delete(eq(owner));
     }
 
     @Test
     @DisplayName("Gives the correct id to the repository when deleting.")
     void deleteById() {
         service.deleteById(ownerId);
-        verify(repository, times(1)).deleteById(eq(ownerId));
+        verify(repository).deleteById(eq(ownerId));
     }
 }
