@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -65,6 +62,35 @@ public class OwnerController {
         final Owner owner = ownerService.findById(ownerId);
         model.addAttribute("owner", owner);
         return "owners/ownerDetails";
+    }
+
+    @GetMapping("/new")
+    public String newOwnerPage(Model model) {
+        model.addAttribute("owner", new Owner());
+        return "owners/createOrUpdateOwnerForm";
+    }
+
+    @PostMapping("/new")
+    public String newOwnerPage(@ModelAttribute Owner owner, Model model) {
+        final Owner savedOwner = ownerService.save(owner);
+        model.addAttribute("owner", savedOwner);
+        return String.format("redirect:/owners/%d/show", savedOwner.getId());
+    }
+
+    @GetMapping("/{ownerId}/edit")
+    public String updateOwnerPage(@PathVariable Long ownerId, Owner givenOwner, Model model) {
+        givenOwner.setId(ownerId);
+        final Owner savedOwner = ownerService.findById(givenOwner.getId());
+        model.addAttribute("owner", savedOwner);
+        return "owners/createOrUpdateOwnerForm";
+    }
+
+    @PostMapping("/{ownerId}/edit")
+    public String updateOwnerPost(@PathVariable Long ownerId, @ModelAttribute Owner givenOwner, Model model) {
+        givenOwner.setId(ownerId);
+        final Owner savedOwner = ownerService.save(givenOwner);
+        model.addAttribute("owner", savedOwner);
+        return String.format("redirect:/owners/%d/show", ownerId);
     }
 
     @InitBinder

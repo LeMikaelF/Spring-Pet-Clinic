@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,14 +51,14 @@ class OwnerServiceJpaTest {
         final Owner owner2 = new Owner();
         owner2.setId(2L);
         final Set<Owner> givenOwners = Stream.of(owner1, owner2).collect(Collectors.toSet());
-        when(repository.findAllByLastNameLike(eq(ownerLastName))).thenReturn(givenOwners);
+        when(repository.findAllByLastNameLike(contains(ownerLastName))).thenReturn(givenOwners);
 
         //when
         final Set<Owner> foundOwners = service.findAllByLastNameLike(ownerLastName);
 
         //then
         assertIterableEquals(foundOwners, givenOwners);
-        verify(repository).findAllByLastNameLike(eq(ownerLastName));
+        verify(repository).findAllByLastNameLike(contains(ownerLastName));
     }
 
     @Test

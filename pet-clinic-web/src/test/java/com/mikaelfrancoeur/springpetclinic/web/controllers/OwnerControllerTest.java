@@ -12,10 +12,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.hamcrest.MockitoHamcrest;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,11 +23,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,8 +36,6 @@ class OwnerControllerTest {
 
     final Long ownerId = 123L;
     final String ownerLastName = "lastName";
-    @Mock
-    Model model;
     @Mock
     OwnerService ownerService;
     @InjectMocks
@@ -167,6 +166,73 @@ class OwnerControllerTest {
         //then
         verify(ownerService).findAll();
         verify(ownerService, never()).findAllByLastNameLike(any());
+    }
+
+    @Test
+    @DisplayName("Displays the new owner page.")
+    public void newOwnerPage() throws Exception {
+        mockMvc.perform(get("/owners/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/createOrUpdateOwnerForm"));
+
+        verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    @DisplayName("Processes the new owner on post")
+    public void newOwnerPost() throws Exception {
+        //given
+        final Owner owner = new Owner();
+        owner.setId(ownerId);
+        when(ownerService.save(any())).thenReturn(owner);
+
+        //when
+        mockMvc.perform(post("/owners/new"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(String.format("redirect:/owners/%d/show", ownerId)))
+                .andExpect(model().attributeExists("owner"));
+
+        //then
+        verify(ownerService).save(any());
+    }
+
+    @Test
+    @DisplayName("Returns a properly populated model for owner update.")
+    public void updateOwnerPage() throws Exception {
+        final Owner owner = new Owner();
+        owner.setId(ownerId);
+        owner.setLastName(ownerLastName);
+        when(ownerService.findById(ownerId)).thenReturn(owner);
+
+        //when
+        mockMvc.perform(get("/owners/{ownerId}/edit", ownerId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/createOrUpdateOwnerForm"))
+                .andExpect(model().attribute("owner",
+                        hasProperty("lastName", equalTo(ownerLastName))));
+
+        //then
+        verify(ownerService).findById(eq(ownerId));
+    }
+
+    @Test
+    @DisplayName("Processes an owner-update post")
+    public void updateOwnerPost() throws Exception {
+        final Owner owner = new Owner();
+        owner.setId(ownerId);
+        owner.setLastName(ownerLastName);
+        when(ownerService.save(any())).thenReturn(owner);
+
+        //when
+        mockMvc.perform(post("/owners/{ownerId}/edit", ownerId)
+                .param("lastName", ownerLastName))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(String.format("redirect:/owners/%d/show", ownerId)))
+                .andExpect(model().attribute("owner",
+                        hasProperty("lastName", equalTo(ownerLastName))));
+
+        //then
+        verify(ownerService).save(MockitoHamcrest.argThat(hasProperty("lastName", equalTo(ownerLastName))));
     }
 }
 
