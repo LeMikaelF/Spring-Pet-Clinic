@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OwnerServiceMapTest {
 
-    @Mock
-    private PetService petService;
-    @Mock
-    private PetTypeService petTypeService;
     OwnerService ownerService;
     Long ownerId = 12345L;
     String ownerLastName = "LastName";
     Owner ownerInService;
+    @Mock
+    private PetService petService;
+    @Mock
+    private PetTypeService petTypeService;
 
     @BeforeEach
     void setUp() {
@@ -124,5 +124,26 @@ class OwnerServiceMapTest {
     @DisplayName("Returns null when findByLastName() is called with non-existing string")
     void findByLastNameNonExisting() {
         assertNull(ownerService.findByLastName("firstName"));
+    }
+
+    @Test
+    @DisplayName("findAllByLastNameLike() returns all and only matching elements")
+    void findAllByLastNameLike() {
+        //given
+        final Owner secondOwner = new Owner();
+        secondOwner.setId(ownerId + 1);
+        secondOwner.setLastName(ownerLastName);
+        final Owner thirdOwner = new Owner();
+        thirdOwner.setId(ownerId + 2);
+        thirdOwner.setLastName("--other last name--");
+
+        ownerService.save(secondOwner);
+        ownerService.save(thirdOwner);
+
+        //when
+        final Set<Owner> foundOwners = ownerService.findAllByLastNameLike(ownerLastName);
+
+        //then
+        assertEquals(2, foundOwners.size());
     }
 }

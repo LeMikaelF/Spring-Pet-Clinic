@@ -13,9 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -39,6 +40,24 @@ class OwnerServiceJpaTest {
         owner.setId(ownerId);
         owner.setLastName(ownerLastName);
         owner.setTelephone(ownerTel);
+    }
+
+    @Test
+    void findAllByLastNameLike() {
+        //given
+        final Owner owner1 = new Owner();
+        owner1.setId(1L);
+        final Owner owner2 = new Owner();
+        owner2.setId(2L);
+        final Set<Owner> givenOwners = Stream.of(owner1, owner2).collect(Collectors.toSet());
+        when(repository.findAllByLastNameLike(eq(ownerLastName))).thenReturn(givenOwners);
+
+        //when
+        final Set<Owner> foundOwners = service.findAllByLastNameLike(ownerLastName);
+
+        //then
+        assertIterableEquals(foundOwners, givenOwners);
+        verify(repository).findAllByLastNameLike(eq(ownerLastName));
     }
 
     @Test

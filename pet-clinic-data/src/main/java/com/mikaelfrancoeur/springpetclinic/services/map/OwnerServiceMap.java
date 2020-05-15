@@ -7,8 +7,10 @@ import com.mikaelfrancoeur.springpetclinic.services.PetTypeService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Service
 @Profile({"map", "default"})
@@ -65,5 +67,12 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
     @Override
     public Owner findByLastName(String lastName) {
         return super.findAll().stream().filter(owner -> owner.getLastName().equals(lastName)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Set<Owner> findAllByLastNameLike(String lastName) {
+        return findAll().stream()
+                .filter(owner -> Objects.equals(owner.getLastName(), lastName))
+                .collect(Collectors.toSet());
     }
 }
