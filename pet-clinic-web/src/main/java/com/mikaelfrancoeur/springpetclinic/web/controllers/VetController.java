@@ -4,7 +4,9 @@ import com.mikaelfrancoeur.springpetclinic.model.Vet;
 import com.mikaelfrancoeur.springpetclinic.services.VetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Set;
 
@@ -21,5 +23,11 @@ public class VetController {
         final Set<Vet> vets = vetService.findAll();
         model.addAttribute("vets", vets);
         return "vets/index";
+    }
+
+    @ResponseBody
+    @GetMapping("/api/vets")
+    public Set<Vet> getVetsJson() {
+        return vetService.findAll();
     }
 }
