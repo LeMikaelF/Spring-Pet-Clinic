@@ -85,6 +85,8 @@ class VisitControllerTest {
 
         //when
         mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/visits/new", ownerId, petId)
+                .param("description", visitDescription)
+                .param("date", "2018-11-11")
                 .param("description", visitDescription))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(String.format("redirect:/owners/%d/pets/%d", ownerId, petId)))
